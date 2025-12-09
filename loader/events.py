@@ -1,4 +1,4 @@
-from config import POS_FIXA, DEFAULT_CHUNK
+from config import POS_FIXA, CHUNKS_DIR
 import asyncio
 from chunk_manager import (
     set_pos_base, aplicar_blocos, 
@@ -20,13 +20,16 @@ def register_events(server):
 
         elif msg.startswith(".load"):
             partes = msg.split(" ", 1)
-
+            
             if len(partes) == 1:
                 await carregar_multiplos_chunks(ctx.server, '1')
-
             else:
                 _, arg = partes
-                await carregar_multiplos_chunks(ctx.server, arg)
+                await aplicar_blocos(ctx.server, f'{CHUNKS_DIR}\{arg}')
+
+        elif msg.startswith(".load.multiplos"):
+            _, arg = partes
+            await carregar_multiplos_chunks(ctx.server, arg)
 
         elif msg.startswith(".clean"):
             partes = msg.split(" ", 1)

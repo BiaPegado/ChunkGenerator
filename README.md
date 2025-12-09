@@ -62,6 +62,9 @@ Após a conexão, os seguintes comandos poderão ser utilizados diretamente no c
 - `.load`  
   Carrega o arquivo `sample_01` (comportamento padrão) no mundo.
 
+- `.load sample_name.txt`  
+  Carrega o arquivo uma única sample da pasta loader/chunks no mundo.
+
 - `.load.multiplos n`  
   Carrega **n samples** geradas no mundo, espaçadas entre si.
 

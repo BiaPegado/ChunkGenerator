@@ -105,4 +105,17 @@ O decoder reconstrói os chunks a partir do vetor latente e das condições forn
 ### Pontos Fracos
 - **Custo Computacional**: Redes convolucionais 3D e o cálculo da perda podem ser computacionalmente caros.
 - **Qualidade da Reconstrução**: A reconstrução pode ser limitada pela capacidade do vetor latente de capturar toda a informação relevante.
-- **Treinamento Sensível**: O equilíbrio entre os termos da perda (reconstrução e KL) pode ser difícil de ajustar..
+- **Treinamento Sensível**: O equilíbrio entre os termos da perda (reconstrução e KL) pode ser difícil de ajustar.
+
+## Treinamento
+
+O treinamento do modelo VAE foi realizado utilizando o dataset de chunks de Minecraft, com o objetivo de aprender uma representação latente que permita a reconstrução e geração de novos chunks. Durante o treinamento, a perda total foi composta por dois termos principais:
+
+1. **Perda de Reconstrução**: Mede a diferença entre os chunks reais e os reconstruídos pelo modelo.
+2. **Divergência KL**: Regulariza o espaço latente para seguir uma distribuição normal padrão.
+
+Abaixo está a curva de perda do treinamento, que mostra a evolução da perda total, da perda de reconstrução e da divergência KL ao longo das épocas:
+
+![Curva de Perda do Treinamento](media/vae_loss_curve.png)
+
+O modelo final foi salvo após atingir a melhor perda total observada durante o treinamento.

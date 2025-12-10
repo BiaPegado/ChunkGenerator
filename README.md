@@ -7,7 +7,7 @@
 
 ## Introdução
 
-O projeto tem como objetivo treinar um __variational autoencoder__ a partir de __voxels__ que representam __chunks__ do jogo Minecraft no formato 16x32x16 para conseguir gerar novas instâncias de __chunk__.
+O projeto tem como objetivo treinar um __variational autoencoder__ a partir de __voxels__ que representam __chunks__ do jogo Minecraft no formato 16x32x16 para conseguir gerar novas instâncias de __chunk__. No treinamento e geração é utilizada uma condição que define o bioma de cada chunk, para permitir geração condicional.
 
 ## Como executar
 
@@ -119,3 +119,11 @@ Abaixo está a curva de perda do treinamento, que mostra a evolução da perda t
 ![Curva de Perda do Treinamento](media/vae_loss_curve.png)
 
 O modelo final foi salvo após atingir a melhor perda total observada durante o treinamento.
+
+## Resultados
+
+No primeiro teste de geração ocorreu um problema de repetição onde todas as chunks foram geradas de maneira igual, como aparece na imagem abaixo
+![Imagem de Chunks Repetidas](media/first_try.jpeg)
+
+Depois desse teste, o problema foi corrigidio e na geração de resultados foi adicionada a barreira do Minecraft, que impede que água vaze mas é invisível, isolando cada Chunk gerada.
+![Imagem de Chunks Geradas](media/second_try.png)

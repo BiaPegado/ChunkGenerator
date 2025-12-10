@@ -34,7 +34,11 @@ def generate():
         print("Formato do dataset processado desconhecido.")
         return
 
-    print(f"Configuração do Modelo detectada: {num_classes} blocos, {num_biomes} biomas.")
+    # Garante que num_biomas esteja definido antes de prosseguir
+    if 'num_biomas' not in locals():
+        num_biomas = 170  # Valor padrão caso não tenha sido definido
+
+    print(f"Configuração do Modelo detectada: {num_classes} blocos, {num_biomas} biomas.")
 
     with open(ID_TO_BLOCK_PATH, 'r') as f:
         raw_dict = json.load(f)
@@ -43,7 +47,7 @@ def generate():
     print("Carregando modelo treinado...")
     model = ConditionalVAE_3D(
         num_classes=num_classes,
-        num_biomes=num_biomes,
+        num_biomes=num_biomas,
         latent_dim=256,
         block_embed_dim=64,
         biome_embed_dim=16
@@ -61,23 +65,32 @@ def generate():
 
     for i in tqdm(range(NUM_SAMPLES)):
 
+        # Amostra um vetor latente z da distribuição normal padrão N(0, 1)
         z = torch.randn(1, 256).to(device)
     
+        # Seleciona aleatoriamente um bioma para condicionar a geração
         rand_biome = torch.randint(0, num_biomes, (1,)).to(device)
         
         with torch.no_grad():
+            # Decodifica o vetor latente z e o bioma para gerar logits (valores não normalizados)
             logits = model.decode(z, rand_biome)
         
+        # Ajusta a temperatura para controlar a aleatoriedade da amostragem
         logits = logits / TEMPERATURE
         
+        # Aplica softmax para converter logits em probabilidades
         probs = torch.nn.functional.softmax(logits, dim=1)
         
+        # Reorganiza as dimensões para facilitar a amostragem
         permuted_probs = probs.permute(0, 2, 3, 4, 1) 
         
+        # Achata as probabilidades para realizar a amostragem
         flat_probs = permuted_probs.reshape(-1, num_classes)
         
+        # Realiza a amostragem multinomial para obter índices gerados
         flat_indices = torch.multinomial(flat_probs, num_samples=1)
         
+        # Reconstrói os índices gerados na forma original do chunk
         generated_indices = flat_indices.reshape(16, 32, 16).cpu().numpy()
         
         sparse_list = []
@@ -89,6 +102,7 @@ def generate():
             
             block_name = id_to_block.get(block_id, "unknown")
             
+            # Ignora blocos de "ar" e desconhecidos para otimizar o armazenamento
             if "air" not in block_name and block_name != "unknown":
                 dx = x - CENTER_X
                 dy = y - CENTER_Y
@@ -102,6 +116,7 @@ def generate():
                 }
                 sparse_list.append(block_data)
 
+        # Salva a amostra gerada em um arquivo JSON
         filename = os.path.join(OUTPUT_DIR, f"sample_{i+1:02d}.txt")
         with open(filename, 'w') as f:
             json.dump(sparse_list, f) 

@@ -47,13 +47,13 @@ class ConditionalVAE_3D(nn.Module):
         # Camada Flatten: 512 * 2 * 4 * 2 = 8192
         self.encoder_flat_dim = 512 * 2 * 4 * 2 
         
-        # --- 2. BOTTLENECK (Onde sua observação acontece!) ---
+        # --- 2. BOTTLENECK ---
         # Duas "cabeças" lineares para gerar os parâmetros da distribuição
         self.fc_mu = nn.Linear(self.encoder_flat_dim, latent_dim)
         self.fc_logvar = nn.Linear(self.encoder_flat_dim, latent_dim)
 
         
-        # --- 3. DECODER (Gera o Chunk a partir do Vetor Latente + Bioma) ---
+        # --- 3. DECODER ---
         
         # Camada para "descomprimir" o vetor latente + bioma
         self.decoder_fc = nn.Linear(decoder_input_dim, self.encoder_flat_dim)
@@ -121,8 +121,6 @@ class ConditionalVAE_3D(nn.Module):
 
     def reparameterize(self, mu, logvar):
         """
-        O TRUQUE DA REPARAMETRIZAÇÃO (O que você mencionou!)
-        
         Amostra um vetor 'z' da distribuição N(mu, var) de uma
         forma que permite o backpropagation.
         z = mu + epsilon * sigma

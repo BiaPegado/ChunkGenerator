@@ -20,9 +20,9 @@ BETA_KLD_WEIGHT = 0.5  # Peso para a perda KL (beta). Começar baixo é bom.
 
 
 # Config Generate Samples
-CHECKPOINT_PATH = 'best_vae_model.pt'
-DATASET_INFO_PATH = 'processed_dataset.pt' # Para pegar nº de classes e biomas
-ID_TO_BLOCK_PATH = 'id_to_block.json'
+CHECKPOINT_PATH = 'models/best_vae_model.pt'
+DATASET_INFO_PATH = 'data/processed_dataset.pt' # Para pegar nº de classes e biomas
+ID_TO_BLOCK_PATH = 'data/id_to_block.json'
 OUTPUT_DIR = 'generated_samples'
 NUM_SAMPLES = 50
 

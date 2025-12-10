@@ -36,7 +36,7 @@ def generate():
 
     # Garante que num_biomas esteja definido antes de prosseguir
     if 'num_biomas' not in locals():
-        num_biomas = 170  # Valor padrão caso não tenha sido definido
+        num_biomas = 2  # Valor padrão caso não tenha sido definido
 
     print(f"Configuração do Modelo detectada: {num_classes} blocos, {num_biomas} biomas.")
 
